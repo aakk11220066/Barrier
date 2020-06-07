@@ -4,7 +4,7 @@
 
 #include "Bed.h"
 #include <stdio.h>
-#include <assert.h>
+#include <cassert>
 
 Bed::Bed() {
     const int SHARED_WITH_THREADS = 0;
@@ -39,8 +39,8 @@ void Bed::wake() {
     assert(semaphoreCount >= 0);
 
     //if bed was empty, decrement it back to 0
-    if (semaphoreCount > 0) {
+    /*if (semaphoreCount > 0) {
         assert(semaphoreCount == 1);
         if (sem_wait(&bed)) perror("Bed::wake sem_wait");
-    }
+    }*/ //commented out to preserve bed wake status if sleeper about to go to sleep
 }

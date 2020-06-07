@@ -4,22 +4,22 @@
 
 #include "ConditionVariable.h"
 
-ConditionVariable::ConditionVariable(Mutex &lock) : lock(lock) {}
+ConditionVariable::ConditionVariable(Mutex *lock) : lock(lock) {}
 
 void ConditionVariable::cond_wait() {
-    if (!lock.isLocked()) throw LockNotAcquired(); //didn't follow usage instructions
+    if (!(lock->isLocked())) throw LockNotAcquired(); //didn't follow usage instructions
 
     bed.registerSleeper();
-    lock.unlock();
+    lock->unlock();
     _isWaiting = true; //log that a process is sleeping here
     bed.sleep(); //go to sleep unless signaled in the meanwhile to awaken
 
     //after reawakening, reacquire lock
-    lock.lock();
+    lock->lock();
 }
 
 void ConditionVariable::cond_signal() {
-    if (!lock.isLocked()) throw LockNotAcquired();
+    if (!(lock->isLocked())) throw LockNotAcquired();
     _isWaiting = false;
     bed.wake();
 }
@@ -27,3 +27,8 @@ void ConditionVariable::cond_signal() {
 bool ConditionVariable::isWaiting() const {
     return _isWaiting;
 }
+
+void ConditionVariable::setLock(Mutex *lock) {
+    ConditionVariable::lock = lock;
+}
+

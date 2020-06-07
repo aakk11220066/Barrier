@@ -10,12 +10,18 @@
 
 class ConditionVariable {
 private:
-    Mutex &lock;
-    bool _isWaiting = false;
-    Bed bed;
+    Mutex *lock = nullptr;
 
 public:
-    explicit ConditionVariable(Mutex &lock); //ctor
+    void setLock(Mutex *lock);
+
+private:
+    bool _isWaiting = false;
+    Bed bed = Bed();
+
+public:
+    explicit ConditionVariable(Mutex *lock); //ctor
+    ConditionVariable() = default;
 
     //DESCRIPTION: unlocks lock and goes to sleep *atomically*, then
     //  (separately) reacquires lock when waking up

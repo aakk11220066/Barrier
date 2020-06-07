@@ -32,6 +32,8 @@ public:
     //DESCRIPTION:
     //SHOULDN'T THROW: LockNotAcquired, BedAlreadyOccupied, BedUnoccupied
     void wait();
+
+    unsigned int waitingThreads() { return nextEmptyBed; }
 };
 
 

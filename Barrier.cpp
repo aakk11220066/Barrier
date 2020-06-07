@@ -23,8 +23,11 @@ void Barrier::wait() {
 
 Barrier::Barrier(unsigned int num_of_threads) :
         numOfThreads(num_of_threads),
-        cond_beds(std::vector<ConditionVariable>(numOfThreads - 1, ConditionVariable(barrierAccessLock))) {}
+        //cond_beds(std::vector<ConditionVariable>(numOfThreads - 1, ConditionVariable(&barrierAccessLock))) {}
+        cond_beds(std::vector<ConditionVariable>(num_of_threads - 1)) {
 
+    for (ConditionVariable &cond_bed : cond_beds) cond_bed.setLock(&barrierAccessLock);
+}
 
 bool Barrier::isFull() {
     if (!barrierAccessLock.isLocked()) throw LockNotAcquired();

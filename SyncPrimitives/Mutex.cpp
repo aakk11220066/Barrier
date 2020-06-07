@@ -14,8 +14,8 @@ Mutex::~Mutex() {
 }
 
 void Mutex::lock() {
-    _isLocked = true;
     if (pthread_mutex_lock(&mutex)) perror("Mutex::lock");
+    _isLocked = true;
 }
 
 void Mutex::unlock() {
